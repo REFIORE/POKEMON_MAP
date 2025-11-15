@@ -58,9 +58,12 @@ def show_pokemon(request, pokemon_id):
     requested_pokemon = Pokemon.objects.get(id=pokemon_id)
     today_time = localtime()
     pokemon_entities = PokemonEntity.objects.filter(pokemon=requested_pokemon, appeared_at__lt=today_time, disappeared_at__gt=today_time)
+
     pokemon = {
         'img_url': request.build_absolute_uri(requested_pokemon.image.url),
         'title_ru': requested_pokemon.title,
+        "title_en": requested_pokemon.title_en,
+        "title_jp": requested_pokemon.title_jp,
         'description': requested_pokemon.description
     }
 
