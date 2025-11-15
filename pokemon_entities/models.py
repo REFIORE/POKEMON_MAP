@@ -4,7 +4,7 @@ from django.db import models  # noqa F401
 class Pokemon(models.Model):
     title = models.CharField(max_length=200)
     image = models.ImageField(blank=True, null=True, upload_to="images", default="image")
-    description = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
     id = models.BigAutoField(primary_key=True)
 
     def __str__(self):
