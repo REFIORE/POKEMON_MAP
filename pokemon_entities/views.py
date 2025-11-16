@@ -62,19 +62,26 @@ def show_pokemon(request, pokemon_id):
     pokemon = {
         'img_url': request.build_absolute_uri(requested_pokemon.image.url),
         'title_ru': requested_pokemon.title,
-        "title_en": requested_pokemon.title_en,
-        "title_jp": requested_pokemon.title_jp,
+        'title_en': requested_pokemon.title_en,
+        'title_jp': requested_pokemon.title_jp,
         'description': requested_pokemon.description
     }
 
-    # for pokemon in requested_pokemon:
-    #     if pokemon['pokemon_id'] == int(pokemon_id):
-    #         requested_pokemon = pokemon
-    #         break
-    # else:
-    #     return HttpResponseNotFound('<h1>Такой покемон не найден</h1>')
+    previous_evolution = requested_pokemon.pokemon_evolution
+    if previous_evolution:
+        pokemon['previous_evolution'] = {
+            "title_ru": previous_evolution.title,
+            "pokemon_id": previous_evolution.id,
+            "img_url": request.build_absolute_uri(previous_evolution.image.url),
+        }
 
-    # for pokemon_entity in requested_pokemon['entities']:
+    next_evolutions = requested_pokemon.pokemon_evolution
+    if next_evolutions:
+        pokemon['next_evolutions'] = {
+            "title_ru": next_evolutions.title,
+            "pokemon_id": next_evolutions.id,
+            "img_url": request.build_absolute_uri(next_evolutions.image.url),
+        }
 
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
     for pokemon_entity in pokemon_entities:
