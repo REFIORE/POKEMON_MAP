@@ -1,6 +1,7 @@
 import folium
 import json
 
+from django.shortcuts import get_object_or_404
 from django.http import HttpResponseNotFound
 from django.shortcuts import render
 from .models import Pokemon, PokemonEntity
@@ -55,7 +56,7 @@ def show_all_pokemons(request):
 
 
 def show_pokemon(request, pokemon_id):
-    requested_pokemon = Pokemon.objects.get(id=pokemon_id)
+    requested_pokemon = get_object_or_404(Pokemon, id=pokemon_id)
     today_time = localtime()
     pokemon_entities = PokemonEntity.objects.filter(pokemon=requested_pokemon, appeared_at__lt=today_time, disappeared_at__gt=today_time)
 
@@ -75,7 +76,7 @@ def show_pokemon(request, pokemon_id):
             "img_url": request.build_absolute_uri(previous_evolution.image.url),
         }
 
-    next_evolutions = requested_pokemon.next_evolution.first()
+    next_evolutions = requested_pokemon.next_evolutions.first()
     if next_evolutions:
         pokemon['next_evolution'] = {
             "title_ru": next_evolutions.title,

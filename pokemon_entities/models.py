@@ -3,11 +3,11 @@ from django.db import models  # noqa F401
 
 class Pokemon(models.Model):
     title = models.CharField(verbose_name='Название на русском', max_length=200)
-    title_en = models.CharField(verbose_name='Название на англоийском', max_length=200)
-    title_jp = models.CharField(verbose_name='Название на японском', max_length=200)
+    title_en = models.CharField(verbose_name='Название на англоийском', max_length=200, blank=True)
+    title_jp = models.CharField(verbose_name='Название на японском', max_length=200, blank=True)
     image = models.ImageField(verbose_name='Изображение', null=True, upload_to="images", default="image")
     description = models.TextField(verbose_name='Описание покемона', blank=True)
-    previous_evolution = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name='next_evolution', verbose_name='Предыдущая эволюция')
+    previous_evolution = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name='next_evolutions', verbose_name='Предыдущая эволюция')
     id = models.BigAutoField(verbose_name='ID покемона', primary_key=True)
 
     def __str__(self):
@@ -15,7 +15,7 @@ class Pokemon(models.Model):
 
 
 class PokemonEntity(models.Model):
-    pokemon = models.ForeignKey(Pokemon, on_delete=models.CASCADE, verbose_name='Покемон')
+    pokemon = models.ForeignKey(Pokemon, on_delete=models.CASCADE, verbose_name='Покемон', related_name='pokemons')
     lat = models.FloatField(verbose_name='Широта')
     lon = models.FloatField(verbose_name='Долгота')
     appeared_at = models.DateTimeField(verbose_name='Дата и время появления покемона', null=True)
